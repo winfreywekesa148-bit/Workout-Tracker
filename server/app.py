@@ -14,7 +14,19 @@ migrate = Migrate(app, db)
 
 db.init_app(app)
 
-# Define Routes here
+# get all workout
+@app.route('/workouts', methods=['GET'])
+def get_workouts():
+    workouts = Workout.query.all()
+    return jsonify([workout.to_dict() for workout in workouts])
+
+# get each workout
+@app.route('/workouts/<int:id>', methods=['GET'])
+def get_workout(id):
+    workout = Workout.query.get_or_404(id)
+    return jsonify(workout.to_dict())
+
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
