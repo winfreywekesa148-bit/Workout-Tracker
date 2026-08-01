@@ -21,6 +21,14 @@ with app.app_context():
     exercise1.save()
     exercise2.save()
 
+    # Create a workout
+    workout1 = Workout(name="Full Body Workout", date="2024-06-01", duration_minutes=45, notes="A full body workout routine.")
+    workout2 = Workout(name="Cardio Blast", date="2024-06-02", duration_minutes=30, notes="High-intensity cardio session.")
+
+    # Add the workout to the session
+    workout1.save()
+    workout2.save()
+
 
 
 
