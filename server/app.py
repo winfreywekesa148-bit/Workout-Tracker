@@ -1,6 +1,7 @@
 from flask import Flask, make_response, request, jsonify
 from flask_migrate import Migrate
 from extensions import db
+from schema import ExerciseSchema, WorkoutSchema, WorkoutExerciseSchema
 
 from models.Exercise import Exercise
 from models.Workout import Workout
@@ -18,13 +19,13 @@ db.init_app(app)
 @app.route('/workouts', methods=['GET'])
 def get_workouts():
     workouts = Workout.query.all()
-    return jsonify([workout.to_dict() for workout in workouts])
+    return jsonify(WorkoutSchema.dump(workouts, many=True))
 
 # get each workout
 @app.route('/workouts/<int:id>', methods=['GET'])
 def get_workout(id):
     workout = Workout.query.get_or_404(id)
-    return jsonify(workout.to_dict())
+    return jsonify(WorkoutSchema.dump(workout))
 
 # create a new workout
 @app.route('/workouts', methods=['POST'])
@@ -33,7 +34,7 @@ def create_workout():
     workout = Workout(date=data['date'], duration_minutes=data['duration_minutes'], notes=data('notes', ''))
     db.session.add(workout)
     db.session.commit()
-    return jsonify(workout.to_dict()), 201
+    return jsonify(WorkoutSchema.dump(workout)), 201
 
 # delete a workout
 @app.route('/workouts/<int:id>', methods=['DELETE'])
@@ -47,13 +48,13 @@ def delete_workout(id):
 @app.route('/exercises', methods=['GET'])
 def get_exercises():
     exercises = Exercise.query.all()
-    return jsonify([exercise.to_dict() for exercise in exercises])
+    return jsonify(ExerciseSchema.dump(exercises, many=True))
 
 # get each exercise
 @app.route('/exercises/<int:id>', methods=['GET'])
 def get_exercise(id):
     exercise = Exercise.query.get_or_404(id)
-    return jsonify(exercise.to_dict())
+    return jsonify(ExerciseSchema.dump(exercise))
 
 # create a new exercise
 @app.route('/exercises', methods=['POST'])
@@ -62,7 +63,7 @@ def create_exercise():
     exercise = Exercise(name=data['name'], category=data['category'], equipment_needed=data('equipment_needed', False))
     db.session.add(exercise)
     db.session.commit()
-    return jsonify(exercise.to_dict()), 201
+    return jsonify(ExerciseSchema.dump(exercise)), 201
 
 # delete an exercise
 @app.route('/exercises/<int:id>', methods=['DELETE'])
@@ -76,7 +77,7 @@ def delete_exercise(id):
 @app.route('/workout_exercises', methods=['GET'])
 def get_workout_exercises():
     workout_exercises = WorkoutExercise.query.all()
-    return jsonify([we.to_dict() for we in workout_exercises])
+    return jsonify(WorkoutExerciseSchema.dump(workout_exercises, many=True))
 
 # create a new workout exercise
 @app.route('/workout_exercises', methods=['POST'])
@@ -85,7 +86,7 @@ def create_workout_exercise():
     workout_exercise = WorkoutExercise(workout_id=data['workout_id'], exercise_id=data['exercise_id'], sets=data['sets'], reps=data['reps'], duration_seconds=data('duration_seconds'))
     db.session.add(workout_exercise)
     db.session.commit()
-    return jsonify(workout_exercise.to_dict()), 201
+    return jsonify(WorkoutExerciseSchema.dump(workout_exercise)), 201
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
