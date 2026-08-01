@@ -16,3 +16,11 @@ with app.app_context():
     # Create some exercises
     exercise1 = Exercise(name="Push-up", category="Strength", equipment_needed=False)
     exercise2 = Exercise(name="Squat", category="Strength", equipment_needed=False)
+
+    # Add exercises to the session
+    exercise1.save()
+    exercise2.save()
+
+
+
+
