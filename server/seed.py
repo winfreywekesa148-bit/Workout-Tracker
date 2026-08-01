@@ -33,5 +33,9 @@ with app.app_context():
     workout_exercise1 = WorkoutExercise(workout_id=workout1.id, exercise_id=exercise1.id, sets=3, reps=15)
     workout_exercise2 = WorkoutExercise(workout_id=workout2.id, exercise_id=exercise2.id, sets=4, reps=20)
 
+    # Add workout exercises to the session
+    workout_exercise1.save()
+    workout_exercise2.save()
+
 
 
