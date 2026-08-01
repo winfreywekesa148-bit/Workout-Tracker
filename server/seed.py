@@ -36,6 +36,8 @@ with app.app_context():
     # Add workout exercises to the session
     workout_exercise1.save()
     workout_exercise2.save()
+    
+    print("Database seeded successfully!")
 
 
 
