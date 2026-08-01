@@ -26,6 +26,24 @@ def get_workout(id):
     workout = Workout.query.get_or_404(id)
     return jsonify(workout.to_dict())
 
+# create a new workout
+@app.route('/workouts', methods=['POST'])
+def create_workout():
+    data = request.get_json()
+    workout = Workout(date=data['date'], duration_minutes=data['duration_minutes'], notes=data('notes', ''))
+    db.session.add(workout)
+    db.session.commit()
+    return jsonify(workout.to_dict()), 201
+
+# delete a workout
+@app.route('/workouts/<int:id>', methods=['DELETE'])
+def delete_workout(id):
+    workout = Workout.query.get_or_404(id)
+    db.session.delete(workout)
+    db.session.commit()
+    return '', 204
+
+
 
 
 if __name__ == '__main__':
